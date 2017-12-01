@@ -1,0 +1,38 @@
+{
+  "name": "ludumdare40",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server/index.js",
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "npm run webpack --watch",
+    "start": "node src/server/index.js",
+    "test": "typings install github:photonstorm/phaser/v2/typescript/typings.json -GD"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cwallace3421/ludumdare40.git"
+  },
+  "author": "Conor Wallace",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cwallace3421/ludumdare40/issues"
+  },
+  "homepage": "https://github.com/cwallace3421/ludumdare40#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "express": "^4.16.2",
+    "jquery": "^3.2.1",
+    "phaser-ce": "^2.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.39",
+    "@types/jquery": "^3.2.16",
+    "ts-loader": "^3.2.0",
+    "typescript": "^2.6.2",
+    "typings": "^2.1.1",
+    "uglifyjs-webpack-plugin": "^1.1.2",
+    "webpack": "^3.9.1"
+  }
+}
