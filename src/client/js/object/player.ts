@@ -1,4 +1,5 @@
 import Pickup from './pickup';
+import Searchable from './searchable';
 import global from '../global/global';
 import keys from '../global/keys';
 
@@ -21,24 +22,33 @@ class Player {
 
 	private createCollision() {
 		global.game.physics.arcade.enable(this.sprite);
-		const radius = this.sprite.width / 2;
-		this.sprite.body.setCircle(radius, 0, this.sprite.height - radius);
+		this.sprite.body.setSize(this.sprite.width, 6, 0, this.sprite.height - 6);
 	}
 
 	public update(delta : number) {
 		this.movement(delta);
 	}
 
-	public interact(pickups : Pickup[], searchables : null[]) {
+	public interact(pickups : Pickup[]) {
 		for (let i = 0; i < pickups.length; i++) {
 			if (global.game.physics.arcade.overlap(this.sprite, pickups[i].getSprite())) {
-				pickups[i].toggleHightlight(true);
+				pickups[i].toggleHighlight(true);
 				if (this.isAnyKeyDown(keys.pickup)) {
 					pickups[i].kill();
 				}
 			} else {
-				pickups[i].toggleHightlight(false);
+				pickups[i].toggleHighlight(false);
 			}
+		}
+	}
+
+	public collide(searchables : Searchable[]) {
+		for (let i = 0; i < searchables.length; i++) {
+			if (!searchables[i].isSolid()) {
+				continue;
+			}
+
+			global.game.physics.arcade.collide(this.sprite, searchables[i].getSprite());
 		}
 	}
 

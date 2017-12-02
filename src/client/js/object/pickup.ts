@@ -31,7 +31,7 @@ class Pickup {
 		this.sprite.body.setCircle(radius, 0, this.sprite.height - radius);
 	}
 
-	public toggleHightlight(visible : boolean) {
+	public toggleHighlight(visible : boolean) {
 		this.highlight.visible = visible;
 	}
 

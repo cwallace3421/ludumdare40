@@ -1,5 +1,7 @@
+import Crate from './object/crate';
 import Pickup from './object/pickup';
 import Player from './object/player';
+import Searchable from './object/searchable';
 import global from './global/global';
 
 class Playing {
@@ -8,6 +10,7 @@ class Playing {
 	private world : Phaser.Sprite;
 	private player : Player;
 	private pickups : Pickup[];
+	private searchables : Searchable[];
 
 	init() {
 		global.game.time.advancedTiming = true;
@@ -23,24 +26,35 @@ class Playing {
 			new Pickup(50, 50),
 			new Pickup(600, 600),
 		];
+		this.searchables = [
+			new Crate(200, 600, false),
+			new Crate(400, 500, false),
+			new Crate(100, 300, true),
+		];
 	}
 
 	update() {
 		this.setDelta();
 		this.player.update(this.delta);
-		this.player.interact(this.pickups, []);
+		this.player.collide(this.searchables);
+		this.player.interact(this.pickups);
 
 		global.game.world.sort('y', Phaser.Group.SORT_ASCENDING);
 	}
 
 	render() {
 		// global.game.debug.body(this.player.getSprite());
+		// for (let i = 0; i < this.searchables.length; i++) {
+		// 	global.game.debug.body(this.searchables[i].getSprite());
+		// }
 	}
 
 	preload() {
 		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
 		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
 		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');
+		global.game.load.image('crate_small', 'assets/crate_small.png');
+		global.game.load.image('crate_tall', 'assets/crate_tall.png');
 		global.game.load.image('world', 'assets/temp_world.png');
 	}
 
