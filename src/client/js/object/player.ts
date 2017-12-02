@@ -7,14 +7,21 @@ class Player {
 	private sprite : Phaser.Sprite;
 
 	constructor(x : number, y : number) {
-		this.speed = 5;
+		this.speed = 200;
 		this.createPlayer(x, y);
 	}
 
 	private createPlayer(x : number, y : number) {
 		this.sprite = global.game.add.sprite(x, y, 'character', 0);
 		this.sprite.anchor.set(0.5, 1);
+		this.createCollision();
 		// Create Shadow
+	}
+
+	private createCollision() {
+		global.game.physics.arcade.enable(this.sprite);
+		const radius = this.sprite.width / 2;
+		this.sprite.body.setCircle(radius, 0, this.sprite.height - radius);
 	}
 
 	public update(delta : number) {
@@ -22,17 +29,15 @@ class Player {
 	}
 
 	private movement(delta : number) {
-		if (this.isAnyKeyDown(keys.up)) {
-			this.sprite.position.y -= this.speed * delta;
-		} else if (this.isAnyKeyDown(keys.down)) {
-			this.sprite.position.y += this.speed * delta;
-		}
+		let dirY = 0;
+		dirY -= this.isAnyKeyDown(keys.up) ? 1 : 0;
+		dirY += this.isAnyKeyDown(keys.down) ? 1 : 0;
 
-		if (this.isAnyKeyDown(keys.left)) {
-			this.sprite.position.x -= this.speed * delta;
-		} else if (this.isAnyKeyDown(keys.right)) {
-			this.sprite.position.x += this.speed * delta;
-		}
+		let dirX = 0;
+		dirX -= this.isAnyKeyDown(keys.left) ? 1 : 0;
+		dirX += this.isAnyKeyDown(keys.right) ? 1 : 0;
+
+		this.sprite.body.velocity.set((dirX * this.speed), (dirY * this.speed));
 	}
 
 	private isAnyKeyDown(keycodes : number[]) {
@@ -42,6 +47,10 @@ class Player {
 			}
 		}
 		return false;
+	}
+
+	public getSprite() {
+		return this.sprite;
 	}
 
 }

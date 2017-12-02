@@ -9,6 +9,9 @@ class Playing {
 
 	init() {
 		global.game.time.advancedTiming = true;
+		global.game.stage.disableVisibilityChange = true;
+		global.game.renderer.clearBeforeRender = false;
+		global.game.renderer.renderSession.roundPixels = true;
 	}
 
 	create() {
@@ -19,6 +22,10 @@ class Playing {
 	update() {
 		this.setDelta();
 		this.player.update(this.delta);
+	}
+
+	render() {
+		global.game.debug.body(this.player.getSprite());
 	}
 
 	preload() {
