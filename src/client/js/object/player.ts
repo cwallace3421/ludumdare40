@@ -1,3 +1,4 @@
+import Pickup from './pickup';
 import global from '../global/global';
 import keys from '../global/keys';
 
@@ -26,6 +27,19 @@ class Player {
 
 	public update(delta : number) {
 		this.movement(delta);
+	}
+
+	public interact(pickups : Pickup[], searchables : null[]) {
+		for (let i = 0; i < pickups.length; i++) {
+			if (global.game.physics.arcade.overlap(this.sprite, pickups[i].getSprite())) {
+				pickups[i].toggleHightlight(true);
+				if (this.isAnyKeyDown(keys.pickup)) {
+					pickups[i].kill();
+				}
+			} else {
+				pickups[i].toggleHightlight(false);
+			}
+		}
 	}
 
 	private movement(delta : number) {
