@@ -1,5 +1,5 @@
 import Playing from './playing';
-import global from './global';
+import global from './global/global';
 
 window.onload = function() {
     global.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'app', null, false, false);

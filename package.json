@@ -5,7 +5,7 @@
   "main": "src/server/index.js",
   "scripts": {
     "build": "webpack",
-    "build:watch": "npm run webpack --watch",
+    "build:watch": "npm run build -- --watch",
     "start": "node src/server/index.js",
     "test": "typings install github:photonstorm/phaser/v2/typescript/typings.json -GD"
   },
