@@ -21,6 +21,7 @@ class Playing {
 		global.game.stage.disableVisibilityChange = true;
 		global.game.renderer.clearBeforeRender = false;
 		global.game.renderer.renderSession.roundPixels = true;
+		global.game.stage.backgroundColor = '#9e9e9e'; //'#7e7e7e';
 		global.game.physics.startSystem(Phaser.Physics.ARCADE);
 		global.game.world.setBounds(0, 0, global.roomW, global.roomH);
 	}
@@ -79,7 +80,7 @@ class Playing {
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
 			if (!value.isAlive()) {
-				this.tint.alpha += 0.1;
+				this.tint.alpha += 0.02;
 				global.ui.pingMessage('+1 Sunglasses');
 			}
 			return value.isAlive();
@@ -117,6 +118,7 @@ class Playing {
 
 	resize() {
 		global.game.scale.setGameSize(window.innerWidth, window.innerHeight);
+		global.ui.updateCountdownPos();
 	}
 
 	setDelta() {

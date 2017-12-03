@@ -42,6 +42,14 @@ class UI {
 		this.countdown.anchor.set(0.5, 1);
 	}
 
+	public isCountdownDone() {
+		return Math.max((this.timestamp + global.countdownAmount) - Math.floor((+new Date()) / 1000), 0) === 0;
+	}
+
+	public updateCountdownPos() {
+		this.countdown.position.x = global.game.camera.width / 2;
+	}
+
 }
 
 export default UI;
