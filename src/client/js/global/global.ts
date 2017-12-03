@@ -5,6 +5,7 @@ const global : Global = {
 	sprGrp: null,
 	uiGrp: null,
 	ui: null,
+	countdownAmount: 3 * 60 + 1,
 	scale: 1.5,
 	roomW: 3000,
 	roomH: 2000,
@@ -18,6 +19,7 @@ interface Global {
 	sprGrp : Phaser.Group;
 	uiGrp : Phaser.Group;
 	ui : UI;
+	countdownAmount : number;
 	scale : number;
 	roomW : number;
 	roomH : number;

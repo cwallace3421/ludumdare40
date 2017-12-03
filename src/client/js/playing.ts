@@ -46,11 +46,11 @@ class Playing {
 	}
 
 	create() {
-		global.ui = new UI();
 		global.sprGrp = global.game.add.group(undefined, 'sprite_group');
 		global.sprGrp.scale.setTo(1.5);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
 		global.uiGrp.fixedToCamera = true;
+		global.ui = new UI();
 
 		this.tint = global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp);
 		this.tint.width = global.game.camera.width;
@@ -72,6 +72,7 @@ class Playing {
 
 	update() {
 		this.setDelta();
+		global.ui.update();
 		this.player.update(this.delta);
 		this.player.collide(this.searchables, this.env.wall);
 		this.player.interact(this.pickups, this.searchables);
