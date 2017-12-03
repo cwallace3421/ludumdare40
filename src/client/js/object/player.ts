@@ -77,6 +77,7 @@ class Player {
 					// Show on ui
 					if (this.isAnyKeyDown(keys.search)) {
 						console.log('looting');
+						global.ui.pingMessage('Crate empty');
 					}
 				}
 			}

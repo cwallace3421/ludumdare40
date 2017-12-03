@@ -2,6 +2,7 @@ import Crate from './object/crate';
 import Pickup from './object/pickup';
 import Player from './object/player';
 import Searchable from './object/searchable';
+import UI from './object/ui';
 import global from './global/global';
 
 class Playing {
@@ -23,17 +24,16 @@ class Playing {
 	}
 
 	create() {
-		// global.font = global.game.add.retroFont('font', 32, 32, Phaser.RetroFont.TEXT_SET11, 48);
-
+		global.ui = new UI();
 		global.sprGrp = global.game.add.group(undefined, 'sprite_group');
 		global.sprGrp.scale.setTo(1.5);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
+		global.uiGrp.fixedToCamera = true;
 
 		this.tint = global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp);
 		this.tint.width = global.game.camera.width;
 		this.tint.height = global.game.camera.height;
 		this.tint.alpha = 0.0;
-		this.tint.fixedToCamera = true;
 
 		this.world = global.game.add.sprite(0, 0, 'world', 0, global.sprGrp);
 		this.player = new Player(500, 500);
@@ -58,6 +58,7 @@ class Playing {
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
 			if (!value.isAlive()) {
 				this.tint.alpha += 0.1;
+				global.ui.pingMessage('+1 Sunglasses');
 			}
 			return value.isAlive();
 		})
@@ -77,13 +78,13 @@ class Playing {
 	}
 
 	preload() {
-		// global.game.load.image('font', 'assets/font.png');
 		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
 		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
 		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');
 		global.game.load.image('crate_small', 'assets/crate_small.png');
 		global.game.load.image('crate_tall', 'assets/crate_tall.png');
 		global.game.load.image('world', 'assets/temp_world.png');
+		global.game.load.image('wall', 'assets/wall_tiled');
 		global.game.load.image('tint', 'assets/tint.png');
 	}
 

@@ -1,8 +1,10 @@
+import UI from '../object/ui';
+
 const global : Global = {
 	game: null,
 	sprGrp: null,
 	uiGrp: null,
-	font: null,
+	ui: null,
 }
 
 export default global;
@@ -11,5 +13,5 @@ interface Global {
 	game : Phaser.Game;
 	sprGrp : Phaser.Group;
 	uiGrp : Phaser.Group;
-	font : Phaser.RetroFont;
+	ui : UI;
 }

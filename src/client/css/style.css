@@ -26,6 +26,10 @@ canvas {
 }
 
 .font {
-  display: none;
+  position: absolute;
+  left: -1000px;
+  visibility: hidden;
+  font-weight: bold;
+  font-size: 18px;
   font-family: 'press-start-2p';
 }
