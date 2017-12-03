@@ -5,6 +5,8 @@ import utils from '../global/utils';
 class Crate extends Searchable {
 
 	private sprite : Phaser.Sprite;
+	private trigger : Phaser.Sprite;
+	private tall : boolean;
 
 	constructor(x : number, y : number, tall : boolean) {
 		super();
@@ -15,6 +17,7 @@ class Crate extends Searchable {
 		this.sprite = global.game.add.sprite(x, y, key, 0, global.sprGrp);
 		this.sprite.anchor.set(0.5, 1);
 		this.createCollision();
+		this.createTrigger();
 	}
 
 	private createCollision() {
@@ -28,8 +31,27 @@ class Crate extends Searchable {
 		this.sprite.body.immovable = true;
 	}
 
+	private createTrigger() {
+		const padding = 10;
+		this.trigger = global.game.add.sprite(0, 0, undefined);
+		this.trigger.anchor.setTo(0.5, 1);
+		this.trigger.width = utils.scale(this.sprite.width + (padding * 2));
+		this.trigger.height = utils.scale(this.sprite.width + (padding * 2));
+		this.trigger.position.y = padding;
+		this.sprite.addChild(this.trigger);
+		global.game.physics.arcade.enable(this.trigger);
+	}
+
+	public isEmpty() {
+		return false;
+	}
+
 	public isSolid() {
 		return true;
+	}
+
+	public getTrigger() {
+		return this.trigger;
 	}
 
 	public getSprite() {

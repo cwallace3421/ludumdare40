@@ -23,6 +23,8 @@ class Playing {
 	}
 
 	create() {
+		// global.font = global.game.add.retroFont('font', 32, 32, Phaser.RetroFont.TEXT_SET11, 48);
+
 		global.sprGrp = global.game.add.group(undefined, 'sprite_group');
 		global.sprGrp.scale.setTo(1.5);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
@@ -51,7 +53,7 @@ class Playing {
 		this.setDelta();
 		this.player.update(this.delta);
 		this.player.collide(this.searchables);
-		this.player.interact(this.pickups);
+		this.player.interact(this.pickups, this.searchables);
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
 			if (!value.isAlive()) {
@@ -67,6 +69,7 @@ class Playing {
 		// global.game.debug.body(this.player.getSprite());
 		// for (let i = 0; i < this.searchables.length; i++) {
 		// 	global.game.debug.body(this.searchables[i].getSprite());
+		// 	global.game.debug.body(this.searchables[i].getTrigger());
 		// }
 		// for (let i = 0; i < this.pickups.length; i++) {
 		// 	global.game.debug.body(this.pickups[i].getSprite());
@@ -74,6 +77,7 @@ class Playing {
 	}
 
 	preload() {
+		// global.game.load.image('font', 'assets/font.png');
 		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
 		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
 		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');

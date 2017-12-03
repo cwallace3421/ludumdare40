@@ -57,9 +57,9 @@ class Player {
 		this.sprite.body.velocity.set((dirX * this.speed), (dirY * this.speed));
 	}
 
-	public interact(pickups : Pickup[]) {
+	public interact(pickups : Pickup[], searchables : Searchable[]) {
 		for (let i = 0; i < pickups.length; i++) {
-			if (pickups[i].isAlive) {
+			if (pickups[i].isAlive()) {
 				if (global.game.physics.arcade.overlap(this.sprite, pickups[i].getSprite())) {
 					pickups[i].toggleHighlight(true);
 					if (this.isAnyKeyDown(keys.pickup)) {
@@ -67,6 +67,17 @@ class Player {
 					}
 				} else {
 					pickups[i].toggleHighlight(false);
+				}
+			}
+		}
+
+		for (let i = 0; i < searchables.length; i++) {
+			if (!searchables[i].isEmpty()) {
+				if (global.game.physics.arcade.overlap(this.sprite, searchables[i].getTrigger())) {
+					// Show on ui
+					if (this.isAnyKeyDown(keys.search)) {
+						console.log('looting');
+					}
 				}
 			}
 		}
