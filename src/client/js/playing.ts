@@ -4,6 +4,7 @@ import Player from './object/player';
 import Searchable from './object/searchable';
 import UI from './object/ui';
 import global from './global/global';
+import types from './global/types';
 import utils from './global/utils';
 
 class Playing {
@@ -14,6 +15,8 @@ class Playing {
 	private pickups : Pickup[];
 	private searchables : Searchable[];
 	private tint : Phaser.Sprite;
+	private gunner : Phaser.Sprite;
+	private redblue : Phaser.Sprite[];
 	private env : { [key:string] : Phaser.Sprite; };
 
 	init() {
@@ -23,7 +26,7 @@ class Playing {
 		global.game.renderer.renderSession.roundPixels = true;
 		global.game.stage.backgroundColor = '#9e9e9e'; //'#7e7e7e';
 		global.game.physics.startSystem(Phaser.Physics.ARCADE);
-		global.game.world.setBounds(0, 0, global.roomW, global.roomH);
+		global.game.world.setBounds(0, 0, utils.scale(global.roomW), utils.scale(global.roomH));
 	}
 
 	createBackground() {
@@ -41,16 +44,16 @@ class Playing {
 		this.env.door.body.setSize(
 			utils.scale(this.env.door.width),
 			utils.scale(this.env.door.width / 2),
-			utils.scale(0) - (this.env.door.anchor.x * (this.env.door.width / 2)),
-			-(this.env.door.anchor.y * (this.env.door.height / 2)) + utils.scale(this.env.door.height) - 10,
+			utils.scale(0) - (this.env.door.anchor.x * this.env.door.width),
+			utils.scale(this.env.door.height) - (this.env.door.anchor.y * this.env.door.height) - 20,
 		);
 	}
 
 	create() {
 		global.decGrp = global.game.add.group(undefined, 'decor_group');
-		global.decGrp.scale.setTo(1.5);
+		global.decGrp.scale.setTo(global.scale);
 		global.sprGrp = global.game.add.group(undefined, 'sprite_group');
-		global.sprGrp.scale.setTo(1.5);
+		global.sprGrp.scale.setTo(global.scale);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
 		global.uiGrp.fixedToCamera = true;
 		global.ui = new UI();
@@ -58,7 +61,28 @@ class Playing {
 		this.tint = global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp);
 		this.tint.width = global.game.camera.width;
 		this.tint.height = global.game.camera.height;
+		this.tint.tint = 0x000000;
 		this.tint.alpha = 0.0;
+
+		this.gunner = global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp);
+		this.gunner.width = global.game.camera.width;
+		this.gunner.height = global.game.camera.height;
+		this.gunner.tint = 0xf0d434;
+		this.gunner.alpha = 0.0;
+
+		this.redblue = [];
+		// Red - Left
+		this.redblue.push(global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp));
+		this.redblue[0].width = global.game.camera.width / 2;
+		this.redblue[0].height = global.game.camera.height;
+		this.redblue[0].tint = 0xce0000;
+		this.redblue[0].alpha = 0.0;
+		// Blue - Right
+		this.redblue.push(global.game.add.sprite(global.game.camera.width / 2, 0, 'tint', 0, global.uiGrp));
+		this.redblue[1].width = global.game.camera.width / 2;
+		this.redblue[1].height = global.game.camera.height;
+		this.redblue[1].tint = 0x0028ce;
+		this.redblue[1].alpha = 0.0;
 
 		this.createBackground();
 		this.player = new Player(this.env.door.centerX, this.env.door.y + 20);
@@ -71,13 +95,31 @@ class Playing {
 		global.ui.update();
 		this.player.update(this.delta);
 		this.player.collide(this.searchables, this.env.wall);
-		this.player.interact(this.pickups, this.searchables);
+		const pickedUp = this.player.interact(this.pickups, this.searchables);
+
+		for (let i = 0; i < pickedUp.length; i++) {
+			const type = pickedUp[i];
+			switch(type) {
+				case 1 : {
+					global.ui.pingMessage('+1 ' + types[type]);
+					this.tint.alpha += 0.02;
+					break;
+				}
+				case 2 : {
+					global.ui.pingMessage('+1 ' + types[type]);
+					this.gunner.alpha += 0.05;
+					break;
+				}
+				case 3 : {
+					global.ui.pingMessage('+1 ' + types[type]);
+					this.redblue[0].alpha += 0.05;
+					this.redblue[1].alpha += 0.05;
+					break;
+				}
+			}
+		}
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
-			if (!value.isAlive()) {
-				this.tint.alpha += 0.02;
-				global.ui.pingMessage('+1 Sunglasses');
-			}
 			return value.isAlive();
 		})
 
@@ -148,6 +190,13 @@ class Playing {
 		global.ui.updateCountdownPos();
 		this.tint.width = global.game.camera.width;
 		this.tint.height = global.game.camera.height;
+		this.gunner.width = global.game.camera.width;
+		this.gunner.height = global.game.camera.height;
+		this.redblue[0].width = global.game.camera.width / 2;
+		this.redblue[0].height = global.game.camera.height;
+		this.redblue[1].width = global.game.camera.width / 2;
+		this.redblue[1].height = global.game.camera.height;
+		this.redblue[1].x = global.game.camera.width / 2;
 	}
 
 	setDelta() {

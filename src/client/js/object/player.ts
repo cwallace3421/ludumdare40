@@ -2,6 +2,7 @@ import Pickup from './pickup';
 import Searchable from './searchable';
 import global from '../global/global';
 import keys from '../global/keys';
+import types from '../global/types';
 import utils from '../global/utils';
 
 class Player {
@@ -27,8 +28,8 @@ class Player {
 		this.sprite.body.setSize(
 			utils.scale(this.sprite.width),
 			utils.scale(6),
-			utils.scale(0) - (this.sprite.anchor.x * (this.sprite.width / 2)),
-			(utils.scale(this.sprite.height) - utils.scale(6)) - (this.sprite.anchor.y * (this.sprite.height / 2)),
+			utils.scale(0) - (this.sprite.anchor.x * (this.sprite.width)),
+			utils.scale(this.sprite.height) - utils.scale(6) - (this.sprite.anchor.y * (this.sprite.height)),
 		);
 	}
 
@@ -67,12 +68,14 @@ class Player {
 		this.sprite.body.velocity.set((dirX * this.speed), (dirY * this.speed));
 	}
 
-	public interact(pickups : Pickup[], searchables : Searchable[]) {
+	public interact(pickups : Pickup[], searchables : Searchable[]) : number[] {
+		const result = [];
 		for (let i = 0; i < pickups.length; i++) {
 			if (pickups[i].isAlive()) {
 				if (global.game.physics.arcade.overlap(this.sprite, pickups[i].getSprite())) {
 					pickups[i].toggleHighlight(true);
 					if (this.isAnyKeyDown(keys.pickup)) {
+						result.push(pickups[i].getType());
 						pickups[i].kill();
 					}
 				} else {
@@ -81,17 +84,24 @@ class Player {
 			}
 		}
 
-		for (let i = 0; i < searchables.length; i++) {
-			if (!searchables[i].isEmpty()) {
+		if (this.isAnyKeyDown(keys.search)) {
+			for (let i = 0; i < searchables.length; i++) {
 				if (global.game.physics.arcade.overlap(this.sprite, searchables[i].getTrigger())) {
-					// Show on ui
-					if (this.isAnyKeyDown(keys.search)) {
-						console.log('looting');
-						global.ui.pingMessage('Crate empty');
+					if (searchables[i].hasBeenLooted()) {
+						continue;
+					}
+
+					const lootedType = searchables[i].loot();
+					if (lootedType === 0) {
+						global.ui.pingMessage('Crate is empty');
+					} else {
+						result.push(lootedType);
 					}
 				}
 			}
 		}
+
+		return result;
 	}
 
 	private isAnyKeyDown(keycodes : number[]) {

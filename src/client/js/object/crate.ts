@@ -7,9 +7,22 @@ class Crate extends Searchable {
 	private sprite : Phaser.Sprite;
 	private trigger : Phaser.Sprite;
 	private tall : boolean;
+	private type : number;
+	private looted : boolean;
 
 	constructor(x : number, y : number, tall : boolean) {
 		super();
+		const chance = Math.random();
+		if (chance <= 0.1) {
+			this.type = 3;
+		} else if (chance <= 0.2) {
+			this.type = 2;
+		} else if (chance <= 0.4) {
+			this.type = 1;
+		} else {
+			this.type = 0;
+		}
+		this.looted = false;
 		this.createCrate(x, y, tall ? 'crate_tall' : 'crate_small');
 	}
 
@@ -28,8 +41,8 @@ class Crate extends Searchable {
 		this.sprite.body.setSize(
 			utils.scale(this.sprite.width),
 			utils.scale(this.sprite.width),
-			utils.scale(0) - (this.sprite.anchor.x * (this.sprite.width / 2)),
-			(utils.scale(this.sprite.height) - utils.scale(this.sprite.width)) - (this.sprite.anchor.y * (this.sprite.height / 2)),
+			utils.scale(0) - (this.sprite.anchor.x * this.sprite.width),
+			utils.scale(this.sprite.height) - utils.scale(this.sprite.width) - (this.sprite.anchor.y * this.sprite.height),
 		);
 		this.sprite.body.immovable = true;
 	}
@@ -45,8 +58,15 @@ class Crate extends Searchable {
 		global.game.physics.arcade.enable(this.trigger);
 	}
 
-	public isEmpty() {
-		return false;
+	public loot() {
+		this.looted = true;
+		const t = this.type;
+		this.type = 0;
+		return t;
+	}
+
+	public hasBeenLooted() {
+		return this.looted;
 	}
 
 	public isSolid() {

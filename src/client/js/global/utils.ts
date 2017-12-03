@@ -7,7 +7,7 @@ class Utils {
 	}
 
 	public static scale(value) : number {
-		return value * global.sprGrp.scale.x;
+		return value * global.scale;
 	}
 
 }

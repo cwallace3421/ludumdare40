@@ -7,7 +7,7 @@ const global : Global = {
 	decGrp: null,
 	ui: null,
 	countdownAmount: 3 * 60 + 1,
-	scale: 1.5,
+	scale: 2,
 	roomW: 2000,
 	roomH: 2000,
 	wallH: 252,
