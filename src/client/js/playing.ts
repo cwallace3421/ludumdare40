@@ -27,14 +27,22 @@ class Playing {
 
 	createBackground() {
 		this.env = {};
+		// Top Wall
 		this.env.wall = global.game.add.sprite(0, 0, 'wall', 0, global.sprGrp);
 		this.env.wall.width = global.roomW;
 		global.game.physics.arcade.enable(this.env.wall);
 		this.env.wall.body.immovable = true;
 		this.env.wall.body.setSize(utils.scale(this.env.wall.width), utils.scale(this.env.wall.height), 0, 0);
-
+		// Exit Door
 		this.env.door = global.game.add.sprite(500, global.wallH + 2, 'exit_door', 0, global.sprGrp);
 		this.env.door.anchor.setTo(0.1, 1);
+		global.game.physics.arcade.enable(this.env.door);
+		this.env.door.body.setSize(
+			utils.scale(this.env.door.width),
+			utils.scale(this.env.door.width / 2),
+			utils.scale(0) - (this.env.door.anchor.x * (this.env.door.width / 2)),
+			-(this.env.door.anchor.y * (this.env.door.height / 2)) + utils.scale(this.env.door.height) - 10,
+		);
 	}
 
 	create() {
@@ -50,10 +58,8 @@ class Playing {
 		this.tint.alpha = 0.0;
 
 		this.createBackground();
-		// this.world = global.game.add.sprite(0, 0, 'world', 0, global.sprGrp);
-		this.player = new Player(500, 500);
+		this.player = new Player(this.env.door.centerX, this.env.door.y + 20);
 		this.pickups = [
-			new Pickup(50, 50),
 			new Pickup(600, 600),
 		];
 		this.searchables = [
@@ -91,6 +97,7 @@ class Playing {
 		// 	global.game.debug.body(this.pickups[i].getSprite());
 		// }
 		// global.game.debug.body(this.env.wall);
+		// global.game.debug.body(this.env.door);
 	}
 
 	preload() {
