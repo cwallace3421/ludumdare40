@@ -4,6 +4,7 @@ import Player from './object/player';
 import Searchable from './object/searchable';
 import UI from './object/ui';
 import global from './global/global';
+import utils from './global/utils';
 
 class Playing {
 
@@ -13,6 +14,7 @@ class Playing {
 	private pickups : Pickup[];
 	private searchables : Searchable[];
 	private tint : Phaser.Sprite;
+	private env : { [key:string] : Phaser.Sprite; };
 
 	init() {
 		global.game.time.advancedTiming = true;
@@ -20,7 +22,19 @@ class Playing {
 		global.game.renderer.clearBeforeRender = false;
 		global.game.renderer.renderSession.roundPixels = true;
 		global.game.physics.startSystem(Phaser.Physics.ARCADE);
-		global.game.world.setBounds(0, 0, 2000, 1500);
+		global.game.world.setBounds(0, 0, global.roomW, global.roomH);
+	}
+
+	createBackground() {
+		this.env = {};
+		this.env.wall = global.game.add.sprite(0, 0, 'wall', 0, global.sprGrp);
+		this.env.wall.width = global.roomW;
+		global.game.physics.arcade.enable(this.env.wall);
+		this.env.wall.body.immovable = true;
+		this.env.wall.body.setSize(utils.scale(this.env.wall.width), utils.scale(this.env.wall.height), 0, 0);
+
+		this.env.door = global.game.add.sprite(500, global.wallH + 2, 'exit_door', 0, global.sprGrp);
+		this.env.door.anchor.setTo(0.1, 1);
 	}
 
 	create() {
@@ -35,7 +49,8 @@ class Playing {
 		this.tint.height = global.game.camera.height;
 		this.tint.alpha = 0.0;
 
-		this.world = global.game.add.sprite(0, 0, 'world', 0, global.sprGrp);
+		this.createBackground();
+		// this.world = global.game.add.sprite(0, 0, 'world', 0, global.sprGrp);
 		this.player = new Player(500, 500);
 		this.pickups = [
 			new Pickup(50, 50),
@@ -52,7 +67,7 @@ class Playing {
 	update() {
 		this.setDelta();
 		this.player.update(this.delta);
-		this.player.collide(this.searchables);
+		this.player.collide(this.searchables, this.env.wall);
 		this.player.interact(this.pickups, this.searchables);
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
@@ -75,6 +90,7 @@ class Playing {
 		// for (let i = 0; i < this.pickups.length; i++) {
 		// 	global.game.debug.body(this.pickups[i].getSprite());
 		// }
+		// global.game.debug.body(this.env.wall);
 	}
 
 	preload() {
@@ -84,7 +100,10 @@ class Playing {
 		global.game.load.image('crate_small', 'assets/crate_small.png');
 		global.game.load.image('crate_tall', 'assets/crate_tall.png');
 		global.game.load.image('world', 'assets/temp_world.png');
-		global.game.load.image('wall', 'assets/wall_tiled');
+
+		global.game.load.image('wall', 'assets/wall_tiled.png');
+		global.game.load.image('exit_door', 'assets/exit_door.png');
+
 		global.game.load.image('tint', 'assets/tint.png');
 	}
 

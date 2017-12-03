@@ -23,6 +23,7 @@ class Player {
 
 	private createCollision() {
 		global.game.physics.arcade.enable(this.sprite);
+		this.sprite.body.collideWorldBounds = true;
 		this.sprite.body.setSize(
 			utils.scale(this.sprite.width),
 			utils.scale(6),
@@ -35,13 +36,22 @@ class Player {
 		this.movement(delta);
 	}
 
-	public collide(searchables : Searchable[]) {
+	public collide(searchables : Searchable[], ...args : Phaser.Sprite[]) {
 		for (let i = 0; i < searchables.length; i++) {
 			if (!searchables[i].isSolid()) {
 				continue;
 			}
 
 			global.game.physics.arcade.collide(this.sprite, searchables[i].getSprite());
+		}
+
+		if (args) {
+			for (let i = 0; i < args.length; i++) {
+				if (!args[i].visible || !args[i].alive) {
+					continue;
+				}
+				global.game.physics.arcade.collide(this.sprite, args[i]);
+			}
 		}
 	}
 
