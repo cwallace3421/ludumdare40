@@ -18,6 +18,9 @@ class Crate extends Searchable {
 		this.sprite.anchor.set(0.5, 1);
 		this.createCollision();
 		this.createTrigger();
+		const shadow = global.game.add.sprite(0, 3, 'crate_shadow');
+		shadow.anchor.set(0.5, 1);
+		this.sprite.addChild(shadow);
 	}
 
 	private createCollision() {

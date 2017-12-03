@@ -47,6 +47,8 @@ class Playing {
 	}
 
 	create() {
+		global.decGrp = global.game.add.group(undefined, 'decor_group');
+		global.decGrp.scale.setTo(1.5);
 		global.sprGrp = global.game.add.group(undefined, 'sprite_group');
 		global.sprGrp.scale.setTo(1.5);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
@@ -60,14 +62,7 @@ class Playing {
 
 		this.createBackground();
 		this.player = new Player(this.env.door.centerX, this.env.door.y + 20);
-		this.pickups = [
-			new Pickup(600, 600),
-		];
-		this.searchables = [
-			new Crate(200, 600, false),
-			new Crate(400, 500, false),
-			new Crate(100, 300, true),
-		];
+		this.generateMap();
 		global.game.camera.follow(this.player.getSprite(), Phaser.Camera.FOLLOW_TOPDOWN);
 	}
 
@@ -89,6 +84,34 @@ class Playing {
 		global.sprGrp.sort('y', Phaser.Group.SORT_ASCENDING);
 	}
 
+	generateMap() {
+		this.pickups = [];
+		this.searchables = [];
+
+		const tileSize = 80;
+		const numTileX = Math.floor(global.roomW / 80);
+		const numTileY = Math.floor((global.roomH - global.wallH) / 80);
+
+		for (let y = 0; y < numTileY; y++) {
+			for (let x = 0; x < numTileX; x++) {
+				const chance = Math.random();
+				if (chance <= 0.1) {
+					const posX = (x * 80) + utils.randomIntFromInterval(30, 50);
+					const posY = (y * 80) + utils.randomIntFromInterval(30, 50) + global.wallH + 30;
+					this.pickups.push(new Pickup(posX, posY));
+				} else if (chance <= 0.4) {
+					const posX = (x * 80) + utils.randomIntFromInterval(30, 50);
+					const posY = (y * 80) + utils.randomIntFromInterval(30, 50) + global.wallH + 30;
+					this.searchables.push(new Crate(posX, posY, Math.random() <= 0.3));
+				} else if (chance >= 0.93) {
+					const posX = (x * 80) + utils.randomIntFromInterval(30, 50);
+					const posY = (y * 80) + utils.randomIntFromInterval(30, 50) + global.wallH + 30;
+					global.game.add.sprite(posX, posY, 'decoration', utils.randomIntFromInterval(0, 7), global.decGrp).anchor.setTo(0.5);
+				}
+			}
+		}
+	}
+
 	render() {
 		// global.game.debug.body(this.player.getSprite());
 		// for (let i = 0; i < this.searchables.length; i++) {
@@ -104,14 +127,18 @@ class Playing {
 
 	preload() {
 		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
+
 		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
 		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');
+
 		global.game.load.image('crate_small', 'assets/crate_small.png');
 		global.game.load.image('crate_tall', 'assets/crate_tall.png');
-		global.game.load.image('world', 'assets/temp_world.png');
+		global.game.load.image('crate_shadow', 'assets/crate_shadow.png');
 
 		global.game.load.image('wall', 'assets/wall_tiled.png');
 		global.game.load.image('exit_door', 'assets/exit_door.png');
+
+		global.game.load.spritesheet('decoration', 'assets/decoration.png', 42, 42, 8);
 
 		global.game.load.image('tint', 'assets/tint.png');
 	}
@@ -119,6 +146,8 @@ class Playing {
 	resize() {
 		global.game.scale.setGameSize(window.innerWidth, window.innerHeight);
 		global.ui.updateCountdownPos();
+		this.tint.width = global.game.camera.width;
+		this.tint.height = global.game.camera.height;
 	}
 
 	setDelta() {
