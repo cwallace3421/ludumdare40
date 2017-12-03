@@ -33,6 +33,9 @@ class UI {
 		const minutes = Math.floor(timeLeft / 60);
 		const seconds = Math.floor(timeLeft % 60);
 		this.countdown.text = (minutes < 10 ? ('0' + minutes) : minutes) + ':' + (seconds < 10 ? ('0' + seconds) : seconds);
+		if (timeLeft < 60) {
+			this.countdown.fill = '#ce0000';
+		}
 	}
 
 	private createCountdown() {
@@ -52,6 +55,10 @@ class UI {
 
 	public isCountdownDone() {
 		return Math.max((this.timestamp + global.countdownAmount) - Math.floor((+new Date()) / 1000), 0) === 0;
+	}
+
+	public getTimeLeft() {
+		return Math.max((this.timestamp + global.countdownAmount) - Math.floor((+new Date()) / 1000), 0);
 	}
 
 	public updateCountdownPos() {

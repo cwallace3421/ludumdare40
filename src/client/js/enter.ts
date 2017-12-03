@@ -29,6 +29,7 @@ class Enter {
 	}
 
 	create() {
+		global.glasses = 0;
 		global.game.input.keyboard.onDownCallback = (event) => {
 			if (event.keyCode === Phaser.Keyboard.ENTER) {
 				this.state--;
@@ -47,7 +48,7 @@ class Enter {
 		this.titleText = global.game.add.text(
 			global.game.camera.width / 2,
 			global.game.camera.height / 2,
-			'Aliens Stole My Glasses',
+			'Aliens Stole My Sunglasses',
 			{
 				font: 'bold 38px press-start-2p',
 				fill: 'white',

@@ -21,11 +21,10 @@ class Playing {
 	private env : { [key:string] : Phaser.Sprite; };
 
 	init() {
-		global.game.time.advancedTiming = true;
 		global.game.stage.disableVisibilityChange = true;
 		global.game.renderer.clearBeforeRender = false;
 		global.game.renderer.renderSession.roundPixels = true;
-		global.game.stage.backgroundColor = '#9e9e9e'; //'#7e7e7e';
+		global.game.stage.backgroundColor = '#9e9e9e';
 		global.game.physics.startSystem(Phaser.Physics.ARCADE);
 		global.game.world.setBounds(0, 0, utils.scale(global.roomW), utils.scale(global.roomH));
 	}
@@ -94,11 +93,6 @@ class Playing {
 		global.game.camera.follow(this.player.getSprite(), Phaser.Camera.FOLLOW_TOPDOWN);
 	}
 
-	preupdate() {
-		console.log(1);
-		this.player.collide(this.searchables, this.env.wall);
-	}
-
 	update() {
 		this.setDelta();
 		global.ui.update();
@@ -131,7 +125,12 @@ class Playing {
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
 			return value.isAlive();
-		})
+		});
+
+		if (global.ui.isCountdownDone() || (global.glasses > 0 && this.player.isOverlap(this.env.door))) {
+			global.game.world.removeAll();
+			global.game.state.start('end', false, false, global.ui.isCountdownDone(), global.ui.getTimeLeft());
+		}
 
 		global.sprGrp.sort('y', Phaser.Group.SORT_ASCENDING);
 	}

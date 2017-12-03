@@ -61,6 +61,10 @@ class Player {
 		}
 	}
 
+	public isOverlap(obj : Phaser.Sprite) {
+		return global.game.physics.arcade.overlap(this.sprite, obj);
+	}
+
 	private movement(delta : number) {
 		let dirY = 0;
 		dirY -= this.isAnyKeyDown(keys.up) ? 1 : 0;
