@@ -155,34 +155,19 @@ class Playing {
 	}
 
 	render() {
-		// global.game.debug.body(this.player.getSprite());
-		// for (let i = 0; i < this.searchables.length; i++) {
-		// 	global.game.debug.body(this.searchables[i].getSprite());
-		// 	global.game.debug.body(this.searchables[i].getTrigger());
-		// }
-		// for (let i = 0; i < this.pickups.length; i++) {
-		// 	global.game.debug.body(this.pickups[i].getSprite());
-		// }
-		// global.game.debug.body(this.env.wall);
-		// global.game.debug.body(this.env.door);
-	}
-
-	preload() {
-		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
-
-		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
-		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');
-
-		global.game.load.image('crate_small', 'assets/crate_small.png');
-		global.game.load.image('crate_tall', 'assets/crate_tall.png');
-		global.game.load.image('crate_shadow', 'assets/crate_shadow.png');
-
-		global.game.load.image('wall', 'assets/wall_tiled.png');
-		global.game.load.image('exit_door', 'assets/exit_door.png');
-
-		global.game.load.spritesheet('decoration', 'assets/decoration.png', 42, 42, 8);
-
-		global.game.load.image('tint', 'assets/tint.png');
+		const debug = false;
+		if (debug) {
+			global.game.debug.body(this.player.getSprite());
+			for (let i = 0; i < this.searchables.length; i++) {
+				global.game.debug.body(this.searchables[i].getSprite());
+				global.game.debug.body(this.searchables[i].getTrigger());
+			}
+			for (let i = 0; i < this.pickups.length; i++) {
+				global.game.debug.body(this.pickups[i].getSprite());
+			}
+			global.game.debug.body(this.env.wall);
+			global.game.debug.body(this.env.door);
+		}
 	}
 
 	resize() {
