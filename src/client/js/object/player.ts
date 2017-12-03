@@ -31,10 +31,15 @@ class Player {
 			utils.scale(0) - (this.sprite.anchor.x * (this.sprite.width)),
 			utils.scale(this.sprite.height) - utils.scale(6) - (this.sprite.anchor.y * (this.sprite.height)),
 		);
+		this.sprite.body.bounce.set(0,0);
 	}
 
 	public update(delta : number) {
 		this.movement(delta);
+
+		if (global.glasses > 0) {
+			this.sprite.frame = 1;
+		}
 	}
 
 	public collide(searchables : Searchable[], ...args : Phaser.Sprite[]) {

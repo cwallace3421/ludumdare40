@@ -44,6 +44,8 @@ class Pickup {
 			utils.scale(0) - (this.sprite.anchor.x * this.sprite.width),
 			utils.scale(0) - (this.sprite.anchor.y * this.sprite.width)
 		);
+		this.sprite.body.immovable = true;
+		this.sprite.body.moves = false;
 	}
 
 	public toggleHighlight(visible : boolean) {

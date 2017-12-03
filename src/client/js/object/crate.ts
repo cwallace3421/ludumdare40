@@ -45,6 +45,7 @@ class Crate extends Searchable {
 			utils.scale(this.sprite.height) - utils.scale(this.sprite.width) - (this.sprite.anchor.y * this.sprite.height),
 		);
 		this.sprite.body.immovable = true;
+		this.sprite.body.moves = false;
 	}
 
 	private createTrigger() {

@@ -104,7 +104,7 @@ class Enter {
 	}
 
 	preload() {
-		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 16 * 8);
+		global.game.load.spritesheet('character', 'assets/character.png', 32, 64, 2);
 
 		global.game.load.spritesheet('pickup', 'assets/pickup.png', 32, 32, 8 * 8);
 		global.game.load.image('pickup_highlight', 'assets/pickup_highlight.png');

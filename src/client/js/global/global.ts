@@ -11,6 +11,7 @@ const global : Global = {
 	roomW: 2000,
 	roomH: 2000,
 	wallH: 252,
+	glasses: 0,
 }
 
 export default global;
@@ -26,4 +27,5 @@ interface Global {
 	roomW : number;
 	roomH : number;
 	wallH : number;
+	glasses : number;
 }

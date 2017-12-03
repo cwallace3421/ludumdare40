@@ -17,6 +17,7 @@ class Playing {
 	private tint : Phaser.Sprite;
 	private gunner : Phaser.Sprite;
 	private redblue : Phaser.Sprite[];
+	private glasses : number;
 	private env : { [key:string] : Phaser.Sprite; };
 
 	init() {
@@ -37,6 +38,7 @@ class Playing {
 		global.game.physics.arcade.enable(this.env.wall);
 		this.env.wall.body.immovable = true;
 		this.env.wall.body.setSize(utils.scale(this.env.wall.width), utils.scale(this.env.wall.height), 0, 0);
+		this.env.wall.body.moves = false;
 		// Exit Door
 		this.env.door = global.game.add.sprite(500, global.wallH + 2, 'exit_door', 0, global.sprGrp);
 		this.env.door.anchor.setTo(0.1, 1);
@@ -47,6 +49,8 @@ class Playing {
 			utils.scale(0) - (this.env.door.anchor.x * this.env.door.width),
 			utils.scale(this.env.door.height) - (this.env.door.anchor.y * this.env.door.height) - 20,
 		);
+		this.env.door.body.immovable = true;
+		this.env.door.body.moves = false;
 	}
 
 	create() {
@@ -90,11 +94,16 @@ class Playing {
 		global.game.camera.follow(this.player.getSprite(), Phaser.Camera.FOLLOW_TOPDOWN);
 	}
 
+	preupdate() {
+		console.log(1);
+		this.player.collide(this.searchables, this.env.wall);
+	}
+
 	update() {
 		this.setDelta();
 		global.ui.update();
-		this.player.update(this.delta);
 		this.player.collide(this.searchables, this.env.wall);
+		this.player.update(this.delta);
 		const pickedUp = this.player.interact(this.pickups, this.searchables);
 
 		for (let i = 0; i < pickedUp.length; i++) {
@@ -117,6 +126,7 @@ class Playing {
 					break;
 				}
 			}
+			global.glasses++;
 		}
 
 		this.pickups = this.pickups.filter((value : Pickup, index : number, array : Pickup[]) => {
