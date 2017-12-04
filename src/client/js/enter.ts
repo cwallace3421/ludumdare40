@@ -129,6 +129,7 @@ class Enter {
 		global.game.load.image('crate_small', 'assets/crate_small.png');
 		global.game.load.image('crate_tall', 'assets/crate_tall.png');
 		global.game.load.image('crate_shadow', 'assets/crate_shadow.png');
+		global.game.load.image('crate_highlight', 'assets/crate_highlight.png');
 
 		global.game.load.image('wall', 'assets/wall_tiled.png');
 		global.game.load.image('exit_door', 'assets/exit_door.png');

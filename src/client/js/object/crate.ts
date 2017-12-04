@@ -5,6 +5,7 @@ import utils from '../global/utils';
 class Crate extends Searchable {
 
 	private sprite : Phaser.Sprite;
+	private highlight : Phaser.Sprite;
 	private trigger : Phaser.Sprite;
 	private tall : boolean;
 	private type : number;
@@ -17,7 +18,7 @@ class Crate extends Searchable {
 			this.type = 3;
 		} else if (chance <= 0.2) {
 			this.type = 2;
-		} else if (chance <= 0.4) {
+		} else if (chance <= 0.5) {
 			this.type = 1;
 		} else {
 			this.type = 0;
@@ -29,8 +30,14 @@ class Crate extends Searchable {
 	private createCrate(x : number, y : number, key : string) {
 		this.sprite = global.game.add.sprite(x, y, key, 0, global.sprGrp);
 		this.sprite.anchor.set(0.5, 1);
+
+		this.highlight = global.game.add.sprite(x, y + 6, 'crate_highlight', 0, global.decGrp);
+		this.highlight.anchor.set(0.5, 1);
+		this.highlight.visible = false;
+
 		this.createCollision();
 		this.createTrigger();
+
 		const shadow = global.game.add.sprite(0, 3, 'crate_shadow', 0, global.decGrp);
 		shadow.anchor.set(0.5, 1);
 		this.sprite.addChild(shadow);
@@ -72,6 +79,10 @@ class Crate extends Searchable {
 
 	public isSolid() {
 		return true;
+	}
+
+	public toggleHighlight(visible : boolean) {
+		this.highlight.visible = visible;
 	}
 
 	public getTrigger() {

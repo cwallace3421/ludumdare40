@@ -59,7 +59,6 @@ class Playing {
 		global.sprGrp.scale.setTo(global.scale);
 		global.uiGrp = global.game.add.group(undefined, 'ui_group');
 		global.uiGrp.fixedToCamera = true;
-		global.ui = new UI();
 
 		this.tint = global.game.add.sprite(0, 0, 'tint', 0, global.uiGrp);
 		this.tint.width = global.game.camera.width;
@@ -87,6 +86,7 @@ class Playing {
 		this.redblue[1].tint = 0x0028ce;
 		this.redblue[1].alpha = 0.0;
 
+		global.ui = new UI();
 		this.createBackground();
 		this.player = new Player(this.env.door.centerX, this.env.door.y + 20);
 		this.generateMap();

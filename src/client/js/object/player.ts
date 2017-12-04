@@ -95,20 +95,24 @@ class Player {
 			}
 		}
 
-		if (this.isAnyKeyDown(keys.search)) {
-			for (let i = 0; i < searchables.length; i++) {
-				if (global.game.physics.arcade.overlap(this.sprite, searchables[i].getTrigger())) {
-					if (searchables[i].hasBeenLooted()) {
-						continue;
-					}
 
-					const lootedType = searchables[i].loot();
-					if (lootedType === 0) {
-						global.ui.pingMessage('Crate is empty');
-					} else {
-						result.push(lootedType);
+		for (let i = 0; i < searchables.length; i++) {
+			if (global.game.physics.arcade.overlap(this.sprite, searchables[i].getTrigger())) {
+				if (!searchables[i].hasBeenLooted()) {
+					searchables[i].toggleHighlight(true);
+					if (this.isAnyKeyDown(keys.search)) {
+						const lootedType = searchables[i].loot();
+						if (lootedType === 0) {
+							global.ui.pingMessage('Crate is empty');
+						} else {
+							result.push(lootedType);
+						}
 					}
+				} else {
+					searchables[i].toggleHighlight(false);
 				}
+			} else {
+				searchables[i].toggleHighlight(false);
 			}
 		}
 
