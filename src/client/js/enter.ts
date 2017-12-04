@@ -14,6 +14,9 @@ class Enter {
 	private introText : Phaser.Text;
 	private anykeyText : Phaser.Text;
 
+	private leftSpr : Phaser.Sprite;
+	private rightSpr : Phaser.Sprite;
+
 	private state : number;
 
 	init() {
@@ -35,6 +38,7 @@ class Enter {
 				this.state--;
 				if (this.state <= 0) {
 					global.game.input.keyboard.onDownCallback = null;
+					global.game.world.removeAll();
 					global.game.state.start('playing');
 				} else if (this.state === 1) {
 					this.introText.visible = true;
@@ -85,7 +89,7 @@ class Enter {
 			'You are one of the aliens. You have entered a warehouse \nand set off the slient ALARM.\n' +
 			'You have 3 minutes to steal as many glasses as you can.\n' +
 			'Get back to the exit before time runs out! Or you\'ll be caught.\n\n' +
-			'Since you have no arms you have to carry them on your face.\nWhich may cause problems...\n\n' +
+			'Since you have no arms you have to carry them on your face.\nWhich may cause problems...\n\n\n' +
 			'WASD to Move\n' + 'E or SPACEBAR to Pickup\n' + 'E or SPACEBAR to Search Crates\n',
 			{
 				font: 'bold 22px press-start-2p',
@@ -98,10 +102,22 @@ class Enter {
 		this.introText.visible = false;
 		this.introText.anchor.setTo(0.5);
 
+		this.leftSpr = global.game.add.sprite(global.game.camera.width / 4, global.game.camera.height / 2, 'pickup', 0);
+		this.leftSpr.anchor.setTo(0.5);
+		this.leftSpr.scale.setTo(18);
+		this.leftSpr.sendToBack();
+		this.leftSpr.angle = 60;
+
+		this.rightSpr = global.game.add.sprite((global.game.camera.width / 4) * 3, global.game.camera.height / 2, 'pickup', 2);
+		this.rightSpr.anchor.setTo(0.5);
+		this.rightSpr.scale.setTo(18);
+		this.rightSpr.sendToBack();
+		this.rightSpr.angle = 160;
 	}
 
 	update() {
-
+		this.leftSpr.angle += 1;
+		this.rightSpr.angle += 1;
 	}
 
 	preload() {

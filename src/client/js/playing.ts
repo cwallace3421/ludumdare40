@@ -96,8 +96,8 @@ class Playing {
 	update() {
 		this.setDelta();
 		global.ui.update();
-		this.player.collide(this.searchables, this.env.wall);
 		this.player.update(this.delta);
+		this.player.collide(this.searchables, this.env.wall);
 		const pickedUp = this.player.interact(this.pickups, this.searchables);
 
 		for (let i = 0; i < pickedUp.length; i++) {

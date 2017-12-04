@@ -19,7 +19,6 @@ class Player {
 		this.sprite = global.game.add.sprite(x, y, 'character', 0, global.sprGrp);
 		this.sprite.anchor.set(0.5, 1);
 		this.createCollision();
-		// Create Shadow
 	}
 
 	private createCollision() {
@@ -74,7 +73,10 @@ class Player {
 		dirX -= this.isAnyKeyDown(keys.left) ? 1 : 0;
 		dirX += this.isAnyKeyDown(keys.right) ? 1 : 0;
 
-		this.sprite.body.velocity.set((dirX * this.speed), (dirY * this.speed));
+		const vector = new Phaser.Point(dirX, dirY);
+		vector.normalize();
+
+		this.sprite.body.velocity.set(vector.x * this.speed, vector.y * this.speed);
 	}
 
 	public interact(pickups : Pickup[], searchables : Searchable[]) : number[] {
